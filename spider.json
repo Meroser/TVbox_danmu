@@ -3,64 +3,64 @@
 			"key": "八戒影视｜APP",
 			"name": "八戒影视｜App",
 			"type": 3,
-			"api": "./app/八戒影视.py"
+			"api": "./plugin/app/八戒影视.py"
 		}, {
 			"key": "懒懒视频｜APP",
 			"name": "懒懒视频｜APP",
 			"type": 3,
-			"api": "./app/懒懒视频.py"
+			"api": "./plugin/app/懒懒视频.py"
 		}, {
 			"key": "欣欣影视｜APP",
 			"name": "欣欣影视｜APP",
 			"type": 3,
 			"changeable": 0,
-			"api": "./app/欣欣影视.py"
+			"api": "./plugin/app/欣欣影视.py"
 		}, {
 			"key": "土豆浏览器 | APP",
 			"name": "土豆浏览器 | APP",
 			"type": 3,
-			"api": "./app/土豆浏览器.py"
+			"api": "./plugin/app/土豆浏览器.py"
 		}, {
 			"key": "58视频",
 			"name": "58视频｜App",
 			"type": 3,
-			"api": "./app/58视频.py"
+			"api": "./plugin/app/58视频.py"
 		}, {
 			"key": "天空影视",
 			"name": "天空影视｜App",
 			"type": 3,
-			"api": "./app/天空影视.py"
+			"api": "./plugin/app/天空影视.py"
 		},
 		{
 			"key": "TVB云播 | APP",
 			"name": "TVB云播 | APP",
 			"type": 3,
-			"api": "./app/Appfox.py",
+			"api": "./plugin/app/Appfox.py",
 			"ext": "http://app.hktvyb.cc"
 		},
 		{
 			"key": "未来影视 | APP",
 			"name": "未来影视 | APP",
 			"type": 3,
-			"api": "./app/Appfox.py",
+			"api": "./plugin/app/Appfox.py",
 			"ext": "http://kumiao.yzbao.com.cn"
 		}, {
 			"key": "森林动漫New",
 			"name": "森林动漫New",
 			"type": 3,
-			"api": "./app/FeiApp.py",
+			"api": "./plugin/app/FeiApp.py",
 			"ext": "https://ysa.yy-fun.cc/feiapp"
 		}, {
 			"key": "新追忆｜APP",
 			"name": "追忆｜App",
 			"type": 3,
-			"api": "./app/ApptoV5无加密.py",
+			"api": "./plugin/app/ApptoV5无加密.py",
 			"ext": "http://111.173.114.61:8762"
 		}, {
 			"key": "爱看影视｜APP",
 			"name": "爱看影视｜APP",
 			"type": 3,
-			"api": "./app/AppMuou.py",
+			"api": "./plugin/app/AppMuou.py",
 			"ext": {
 				"host": "https://muouapp.oss-cn-hangzhou.aliyuncs.com/MUOUAPP/2261518485.txt",
 				"name": "爱看影视",
@@ -70,7 +70,7 @@
 			"key": "金牌影院｜APP",
 			"name": "金牌影院｜APP",
 			"type": 3,
-			"api": "./app/AppMuou.py",
+			"api": "./plugin/app/AppMuou.py",
 			"ext": {
 				"host": "https://muouapp.oss-cn-hangzhou.aliyuncs.com/MUOUAPP/godbbq.txt",
 				"name": "金牌影院（请断网再安装）",
@@ -80,7 +80,7 @@
 			"key": "23影视｜APP",
 			"name": "23影视｜APP",
 			"type": 3,
-			"api": "./app/AppMuou.py",
+			"api": "./plugin/app/AppMuou.py",
 			"ext": {
 				"host": "https://muouapp.oss-cn-hangzhou.aliyuncs.com/MUOUAPP/764119293.txt",
 				"name": "23影视",
@@ -90,7 +90,7 @@
 			"key": "火猫影视",
 			"name": "火猫影视｜APP",
 			"type": 3,
-			"api": "./app/AppMuou.py",
+			"api": "./plugin/app/AppMuou.py",
 			"ext": {
 				"host": "https://muouapp.oss-cn-hangzhou.aliyuncs.com/MUOUAPP/3929393553.txt",
 				"name": "火猫影视",
@@ -100,7 +100,7 @@
 			"key": "嘶哩嘶哩",
 			"name": "嘶哩嘶哩｜APP",
 			"type": 3,
-			"api": "./app/skapp.py",
+			"api": "./plugin/app/skapp.py",
 			"ext": {
 				"host": "https://silisili-1251358327.cos.ap-shanghai.myqcloud.com/skapp/api.txt",
 				"key": "ygcnbcznazmyrbdn",
@@ -110,7 +110,7 @@
 			"key": "不知名影视",
 			"name": "不知名影视｜APP",
 			"type": 3,
-			"api": "./app/skapp.py",
+			"api": "./plugin/app/skapp.py",
 			"ext": {
 				"host": "http://156.226.178.60:8762/skkkkk.txt",
 				"key": "ygcnbclnqzsmebxd",
@@ -120,7 +120,7 @@
 			"key": "月亮影视",
 			"name": "月亮影视｜APP",
 			"type": 3,
-			"api": "./app/skapp.py",
+			"api": "./plugin/app/skapp.py",
 			"ext": {
 				"host": "http://sk.13tv.top:6542/assets/dd.txt",
 				"key": "ygcnbcgeomivjoyn",
@@ -130,7 +130,7 @@
 			"key": "即看影视",
 			"name": "即看影视｜APP",
 			"type": 3,
-			"api": "./app/skapp.py",
+			"api": "./plugin/app/skapp.py",
 			"ext": {
 				"host": "https://skyappdata-1321528676.cos.accelerate.myqcloud.com/4kapp/appipr.txt",
 				"key": "ygcnbckhcuvygdyb",
@@ -140,7 +140,7 @@
 			"key": "看客联盟",
 			"name": "看客联盟｜APP",
 			"type": 3,
-			"api": "./app/skapp.py",
+			"api": "./plugin/app/skapp.py",
 			"ext": {
 				"host": "https://kankelm.cn:2024/appdomain.txt",
 				"key": "ygcnbcvybqqckwqy",
@@ -150,7 +150,7 @@
 			"key": "2k动漫",
 			"name": "2k动漫｜APP",
 			"type": 3,
-			"api": "./app/skapp.py",
+			"api": "./plugin/app/skapp.py",
 			"ext": {
 				"host": "https://dmsk.oss-rg-china-mainland.aliyuncs.com/dmapp/dmapi.txt",
 				"key": "ygcnbcobcegtgigg",
@@ -160,7 +160,7 @@
 			"key": "剧永久｜APP",
 			"name": "剧永久｜APP",
 			"type": 3,
-			"api": "./app/AppV2.py",
+			"api": "./plugin/app/AppV2.py",
 			"ext": {
 				"api": "http://yjyi.juyongjiu.com/icciu_api.php/v1.vod",
 				"datasignkey": "6QQNUsP3PkD2ajJCPCY8",
@@ -170,13 +170,13 @@
 			"key": "酷秒至尊2.0｜APP",
 			"name": "酷秒至尊2.0｜APP",
 			"type": 3,
-			"api": "./app/AppV2.py",
+			"api": "./plugin/app/AppV2.py",
 			"ext": "http://160.202.231.210:7080/ikumiao_api.php/v1.vod"
 		}, {
 			"key": "享趣视频｜APP",
 			"name": "享趣视频 | APP",
 			"type": 3,
-			"api": "./app/享趣视频.py",
+			"api": "./plugin/app/享趣视频.py",
 			"ext": {
 				"host": "https://video.xqkk.app",
 				"parse": {
@@ -190,17 +190,17 @@
 			"key": "山有木兮 | web",
 			"name": "山有木兮 | web",
 			"type": 3,
-			"api": "./web/山有木兮.py"
+			"api": "./plugin/web/山有木兮.py"
 		}, {
 			"key": "锦鲤短剧 | web",
 			"name": "锦鲤短剧 | web",
 			"type": 3,
-			"api": "./web/锦鲤短剧.py"
+			"api": "./plugin/web/锦鲤短剧.py"
 		}, {
 			"key": "星之阁短剧 | api",
 			"name": "星之阁短剧 | api",
 			"type": 3,
-			"api": "./web/星之阁短剧.py"
+			"api": "./plugin/web/星之阁短剧.py"
 		}
 	],
 	"wallpaper": "https://picsum.photos/1080",
