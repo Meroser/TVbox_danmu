@@ -15,7 +15,7 @@
             --text-main: #2d3748;
             --text-muted: #718096;
             --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -25,7 +25,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
@@ -45,55 +45,16 @@
             color: var(--primary-color);
         }
 
-        .settings-btn {
-            background: var(--card-bg);
-            border: 1px solid #e2e8f0;
-            padding: 8px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: 0.2s;
-            font-weight: 600;
-        }
-
-        .settings-btn:hover {
-            background: #edf2f7;
-        }
-
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 14px 20px;
-            border: 1px solid #e2e8f0;
-            border-radius: var(--radius);
-            font-size: 1rem;
-            box-shadow: var(--shadow);
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary-color);
-        }
-
         .btn {
-            padding: 14px 24px;
+            padding: 10px 20px;
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: var(--radius);
+            border-radius: 8px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: background 0.2s;
-            white-space: nowrap;
+            transition: 0.2s;
         }
 
         .btn:hover {
@@ -108,13 +69,37 @@
         .btn-secondary {
             background: #edf2f7;
             color: var(--text-main);
-            padding: 10px 16px;
-            box-shadow: none;
-            border: 1px solid #cbd5e0;
         }
 
         .btn-secondary:hover {
             background: #e2e8f0;
+        }
+
+        .settings-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            box-shadow: var(--shadow);
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
         }
 
         .main-content {
@@ -122,22 +107,54 @@
             margin: 0 auto;
         }
 
+        .loading,
+        .error,
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .error {
+            color: #e53e3e;
+        }
+
+        /* 卡片与网格 */
         .source-group {
             margin-bottom: 40px;
         }
 
         .source-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #e2e8f0;
             color: #4a5568;
-            text-transform: capitalize;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .source-logo {
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            object-fit: contain;
+        }
+
+        .source-count {
+            font-size: 0.9rem;
+            background: #e2e8f0;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: auto;
+            font-weight: 600;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 20px;
         }
 
@@ -147,7 +164,7 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: 0.2s;
             display: flex;
             flex-direction: column;
         }
@@ -158,32 +175,24 @@
 
         .card-img {
             width: 100%;
-            height: 260px;
+            height: 230px;
             object-fit: cover;
             background-color: #edf2f7;
         }
 
         .card-info {
-            padding: 15px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            flex: 1;
+            gap: 6px;
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-
-        .card-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            font-size: 0.8rem;
         }
 
         .tag {
@@ -191,22 +200,77 @@
             color: #3182ce;
             padding: 2px 8px;
             border-radius: 4px;
+            font-size: 0.8rem;
             font-weight: 500;
         }
 
-        .tag.source {
-            background: #e6fffa;
-            color: #319795;
+        /* 剧集列表与优化后的分组标题 */
+        .details-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        /* 模态框样式 */
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .episode-source-group {
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .episode-source-title {
+            font-size: 1.05rem;
+            color: var(--primary-hover);
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: #ebf4ff;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0 4px 4px 0;
+            font-weight: 600;
+        }
+
+        .episodes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .episode-btn {
+            background: var(--bg-color);
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .episode-btn:hover {
+            border-color: var(--primary-color);
+            background: #ebf4ff;
+            color: var(--primary-color);
+        }
+
+        /* 模态框 */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
             align-items: center;
@@ -220,30 +284,28 @@
             border-radius: var(--radius);
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
         }
 
         .modal h2 {
             margin-bottom: 20px;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
 
         .close-modal {
             cursor: pointer;
-            font-size: 1.2rem;
             color: var(--text-muted);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 500;
             font-size: 0.95rem;
         }
@@ -267,83 +329,12 @@
             min-height: 20px;
         }
 
-        /* 剧集列表样式 */
-        .details-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
-            font-size: 1rem;
-            color: var(--primary-color);
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-
-        /* 剧集分组与单行显示样式 */
-        .episode-source-group {
-            margin-bottom: 30px;
-            background: var(--card-bg);
+        footer {
+            margin-top: 50px;
             padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        .episode-source-title {
-            font-size: 1.1rem;
-            color: #4a5568;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e2e8f0;
-            text-transform: capitalize;
-        }
-
-        .episodes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .episode-btn {
-            background: var(--bg-color);
-            border: 1px solid #e2e8f0;
-            padding: 14px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 1rem;
-            transition: all 0.2s;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .episode-btn:hover {
-            border-color: var(--primary-color);
-            background: #ebf4ff;
-            color: var(--primary-color);
-        }
-
-        .loading,
-        .error,
-        .no-data {
             text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .error {
-            color: #e53e3e;
+            color: #999;
+            font-size: 13px;
         }
 
         @media (max-width: 600px) {
@@ -352,19 +343,11 @@
             }
 
             .card-img {
-                height: 190px;
+                height: 180px;
             }
 
             .search-container {
                 flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .episode-source-group {
-                padding: 15px;
             }
         }
     </style>
@@ -374,12 +357,12 @@
 
     <header class="header">
         <h1>📺 弹幕推送-OK影视</h1>
-        <button class="settings-btn" onclick="openSettings()">⚙️ 设置</button>
+        <button class="btn settings-btn" onclick="toggleModal(true)">⚙️ 设置</button>
     </header>
 
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="输入影视名称，例如：生万物"
-            onkeypress="handleEnter(event)">
+            onkeypress="if(event.key==='Enter') searchAnime()">
         <button class="btn" id="searchBtn" onclick="searchAnime()">搜索</button>
     </div>
 
@@ -387,328 +370,233 @@
         <div class="no-data">请输入名称开始搜索</div>
     </main>
 
-    <footer
-        style="margin-top: 50px; padding: 20px; border-top: 1px solid #eee; text-align: center; color: #666;font-size: 14px;">
-        <div style="display: flex; justify-content: center; align-items: center; gap: 15px;">
-            <p style="margin: 0;">当前版本 v1.0</p>
-            <span style="color: #ccc;">|</span>
-            <a href="https://github.com/Meroser/TVbox" target="_blank" style="color: #3b82f6; text-decoration: none;">
-                访问 GitHub 项目
-            </a>
+    <footer>
+        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 5px;">
+            <span>当前版本 v1.1.0</span> | <a href="https://github.com/Meroser/TVbox" target="_blank"
+                style="color: #3b82f6; text-decoration: none;">访问 GitHub</a>
         </div>
-        <p style="margin-top: 10px; font-size: 12px; color: #999;">
-            本站仅供个人学习研究使用，请勿用于商业用途。
-        </p>
-
+        本站仅供个人学习研究使用，请勿用于商业用途。
     </footer>
+
     <div class="modal-overlay" id="settingsModal">
         <div class="modal">
-            <h2>
-                接口设置
-                <span class="close-modal" onclick="closeSettings()">✖</span>
-            </h2>
+            <h2>接口设置 <span class="close-modal" onclick="toggleModal(false)">✖</span></h2>
             <div class="form-group">
-                <label>弹幕API完整地址 (含http及Token，如 http://10.0.0.1:9321/87654321)</label>
+                <label>弹幕API (如 http://ip:port/token)</label>
                 <div class="input-group">
                     <input type="text" id="apiUrlInput" placeholder="http://ip:port/token">
-                    <button class="btn btn-secondary" onclick="testApiConn()">测试</button>
+                    <button class="btn btn-secondary" onclick="testConn('apiUrlInput', 'apiTestMsg', false)">测试</button>
                 </div>
                 <div id="apiTestMsg" class="test-msg"></div>
             </div>
             <div class="form-group">
-                <label>OK影视完整地址 (如 http://192.168.1.100:9978)</label>
+                <label>OK影视地址 (如 http://ip:port)</label>
                 <div class="input-group">
                     <input type="text" id="okUrlInput" placeholder="http://ip:port">
-                    <button class="btn btn-secondary" onclick="testOkConn()">测试</button>
+                    <button class="btn btn-secondary" onclick="testConn('okUrlInput', 'okTestMsg', true)">测试</button>
                 </div>
                 <div id="okTestMsg" class="test-msg"></div>
             </div>
-
             <button class="btn" style="width: 100%; margin-top: 10px;" onclick="saveSettings()">保存配置</button>
         </div>
     </div>
 
-
     <script>
+        // DOM快捷选择器
+        const $ = id => document.getElementById(id);
+
+        const SOURCE_CONFIG = {
+            "source_data": {
+                "tencent": { "name": "腾讯视频", "logo": "./img/danmu_logo/tencent.png" },
+                "youku": { "name": "优酷", "logo": "./img/danmu_logo/youku.png" },
+                "iqiyi": { "name": "爱奇艺", "logo": "./img/danmu_logo/iqiyi.png" },
+                "imgo": { "name": "芒果TV", "logo": "./img/danmu_logo/imgo.png" },
+                "bilibili": { "name": "哔哩哔哩", "logo": "./img/danmu_logo/bilibili.png" },
+                "renren": { "name": "人人影视", "logo": "./img/danmu_logo/renren.png" },
+                "360": { "name": "360视频", "logo": "./img/danmu_logo/360.png" },
+                "vod": { "name": "vod", "logo": "./img/danmu_logo/vod.png" },
+                "default": { "name": "其他", "logo": "./img/danmu_logo/default.png" }
+            },
+            "order": ["tencent", "youku", "iqiyi", "imgo", "bilibili", "renren", "360", "vod"]
+        };
+
         let currentSearchResults = null;
 
         window.onload = () => {
-            const apiUrl = localStorage.getItem('danmu_api_url');
-            const okUrl = localStorage.getItem('danmu_ok_url');
-            if (!apiUrl || !okUrl) {
-                openSettings();
-            }
+            if (!localStorage.getItem('danmu_api_url') || !localStorage.getItem('danmu_ok_url')) toggleModal(true);
         };
 
-        function openSettings() {
-            document.getElementById('apiUrlInput').value = localStorage.getItem('danmu_api_url') || '';
-            document.getElementById('okUrlInput').value = localStorage.getItem('danmu_ok_url') || '';
-            document.getElementById('apiTestMsg').innerHTML = '';
-            document.getElementById('okTestMsg').innerHTML = '';
-            document.getElementById('settingsModal').style.display = 'flex';
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsModal').style.display = 'none';
-        }
-
-        function formatUrl(url) {
-            return url.trim().replace(/\/$/, '');
-        }
-
-        async function testApiConn() {
-            const url = formatUrl(document.getElementById('apiUrlInput').value);
-            const msgEl = document.getElementById('apiTestMsg');
-            if (!url) { msgEl.innerHTML = '<span style="color:#e53e3e">请输入API地址</span>'; return; }
-
-            msgEl.innerHTML = '<span style="color:#3182ce">测试中...</span>';
-            try {
-                await fetch(url, { mode: 'no-cors' });
-                msgEl.innerHTML = '<span style="color:#48bb78">✅ 连接成功 (或已发出请求)</span>';
-            } catch (e) {
-                msgEl.innerHTML = `<span style="color:#e53e3e">❌ 连接失败: ${e.message}</span>`;
+        function toggleModal(show) {
+            if (show) {
+                $('apiUrlInput').value = localStorage.getItem('danmu_api_url') || '';
+                $('okUrlInput').value = localStorage.getItem('danmu_ok_url') || '';
+                $('apiTestMsg').innerHTML = $('okTestMsg').innerHTML = '';
             }
+            $('settingsModal').style.display = show ? 'flex' : 'none';
         }
 
-        async function testOkConn() {
-            const url = formatUrl(document.getElementById('okUrlInput').value);
-            const msgEl = document.getElementById('okTestMsg');
-            if (!url) { msgEl.innerHTML = '<span style="color:#e53e3e">请输入OK影视地址</span>'; return; }
+        const formatUrl = url => url.trim().replace(/\/$/, '');
+        const cleanStr = (title, regex) => title.replace(regex, '').trim();
+
+        // 合并精简版测试探针
+        async function testConn(inputId, msgId, isOkMode) {
+            const url = formatUrl($(inputId).value);
+            const msgEl = $(msgId);
+            if (!url) return msgEl.innerHTML = '<span style="color:#e53e3e">请输入完整地址</span>';
 
             msgEl.innerHTML = '<span style="color:#3182ce">测试中...</span>';
             try {
-                await fetch(`${url}/action?do=test`, { mode: 'no-cors' });
-                msgEl.innerHTML = '<span style="color:#48bb78">✅ 连接成功 (或已发出请求)</span>';
+                await fetch(isOkMode ? `${url}/action?do=test` : url, { mode: 'no-cors' });
+                msgEl.innerHTML = '<span style="color:#48bb78">✅ 连接成功</span>';
             } catch (e) {
-                msgEl.innerHTML = `<span style="color:#e53e3e">❌ 连接失败: ${e.message}</span>`;
+                msgEl.innerHTML = '<span style="color:#e53e3e">❌ 连接失败</span>';
             }
         }
 
         function saveSettings() {
-            const apiUrl = document.getElementById('apiUrlInput').value;
-            const okUrl = document.getElementById('okUrlInput').value;
-
-            if (!apiUrl || !okUrl) {
-                alert('请填写完整这两个地址！');
-                return;
-            }
-
-            localStorage.setItem('danmu_api_url', formatUrl(apiUrl));
-            localStorage.setItem('danmu_ok_url', formatUrl(okUrl));
-            closeSettings();
-        }
-
-        function cleanAnimeTitle(title) {
-            return title.split('【')[0].trim();
-        }
-
-        function cleanEpisodeTitle(title) {
-            return title.replace(/【.*?】\s*/g, '').trim();
-        }
-
-        function handleEnter(e) {
-            if (e.key === 'Enter') searchAnime();
+            const api = formatUrl($('apiUrlInput').value), ok = formatUrl($('okUrlInput').value);
+            if (!api || !ok) return alert('请填写完整这两个地址！');
+            localStorage.setItem('danmu_api_url', api);
+            localStorage.setItem('danmu_ok_url', ok);
+            toggleModal(false);
         }
 
         async function searchAnime() {
-            const query = document.getElementById('searchInput').value.trim();
-            if (!query) return;
-
+            const query = $('searchInput').value.trim();
             const apiUrl = localStorage.getItem('danmu_api_url');
-            if (!apiUrl) return openSettings();
+            if (!query) return;
+            if (!apiUrl) return toggleModal(true);
 
-            const appContent = document.getElementById('appContent');
-            const searchBtn = document.getElementById('searchBtn');
-
-            searchBtn.disabled = true;
-            searchBtn.innerText = '搜索中...';
-            appContent.innerHTML = '<div class="loading">⏳ 正在搜索，请稍候...</div>';
+            $('searchBtn').disabled = true;
+            $('searchBtn').innerText = '搜索中...';
+            $('appContent').innerHTML = '<div class="loading">⏳ 正在搜索，请稍候...</div>';
 
             try {
-                const reqUrl = `${apiUrl}/api/v2/search/anime?keyword=${encodeURIComponent(query)}`;
-                const res = await fetch(reqUrl);
+                const res = await fetch(`${apiUrl}/api/v2/search/anime?keyword=${encodeURIComponent(query)}`);
                 const data = await res.json();
 
-                if (!data.success || !data.animes || data.animes.length === 0) {
-                    appContent.innerHTML = '<div class="no-data">😔 未找到相关结果</div>';
-                    return;
+                if (!data.success || !data.animes?.length) {
+                    return $('appContent').innerHTML = '<div class="no-data">😔 未找到相关结果</div>';
                 }
 
                 currentSearchResults = data.animes;
                 renderGroupedResults(data.animes);
-
             } catch (err) {
-                appContent.innerHTML = `<div class="error">❌ 请求失败，请检查API地址配置或网络：${err.message}</div>`;
+                $('appContent').innerHTML = `<div class="error">❌ 请求失败：${err.message}</div>`;
             } finally {
-                searchBtn.disabled = false;
-                searchBtn.innerText = '搜索';
+                $('searchBtn').disabled = false;
+                $('searchBtn').innerText = '搜索';
             }
         }
 
         function renderGroupedResults(animes) {
             const grouped = animes.reduce((acc, anime) => {
-                const source = anime.source || 'other';
-                if (!acc[source]) acc[source] = [];
-                acc[source].push(anime);
+                (acc[anime.source || 'other'] = acc[anime.source || 'other'] || []).push(anime);
                 return acc;
             }, {});
 
-            let html = '';
-            for (const [source, items] of Object.entries(grouped)) {
-                html += `<div class="source-group">
-                            <h2 class="source-title">📌 来源: ${source}</h2>
-                            <div class="grid">`;
+            const sortedSources = Object.keys(grouped).sort((a, b) => {
+                const iA = SOURCE_CONFIG.order.indexOf(a), iB = SOURCE_CONFIG.order.indexOf(b);
+                if (iA !== -1 && iB !== -1) return iA - iB;
+                return iA !== -1 ? -1 : iB !== -1 ? 1 : a.localeCompare(b);
+            });
 
-                items.forEach(anime => {
-                    const cleanTitle = cleanAnimeTitle(anime.animeTitle);
-                    const imgUrl = anime.imageUrl || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23edf2f7"/></svg>';
-                    html += `
-                        <div class="card" onclick="fetchDetails(${anime.animeId}, '${anime.animeTitle.replace(/'/g, "\\'")}')">
-                            <img class="card-img" src="${imgUrl}" alt="${cleanTitle}" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23edf2f7\\'/></svg>'">
-                            <div class="card-info">
-                                <div class="card-title" title="${cleanTitle}">${cleanTitle}</div>
-                                <div class="card-meta">
-                                    <span class="tag">${anime.type || '未知'}</span>
-                                    <span class="tag source">${anime.episodeCount || '?'} 集</span>
+            $('appContent').innerHTML = sortedSources.map(source => {
+                const items = grouped[source];
+                const info = SOURCE_CONFIG.source_data[source] || SOURCE_CONFIG.source_data.default;
+                const dName = SOURCE_CONFIG.source_data[source] ? info.name : source;
+
+                return `
+                <div class="source-group">
+                    <h2 class="source-title">
+                        <img src="${info.logo}" class="source-logo" onerror="this.src='${SOURCE_CONFIG.source_data.default.logo}'">
+                        <span>${dName}</span><span class="source-count">${items.length}</span>
+                    </h2>
+                    <div class="grid">
+                        ${items.map(anime => {
+                    const cTitle = cleanStr(anime.animeTitle, /【.*/);
+                    const img = anime.imageUrl || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="%23edf2f7"/></svg>';
+                    return `
+                            <div class="card" onclick="fetchDetails(${anime.animeId}, '${anime.animeTitle.replace(/'/g, "\\'")}')">
+                                <img class="card-img" src="${img}" alt="${cTitle}" loading="lazy">
+                                <div class="card-info">
+                                    <div class="card-title" title="${cTitle}">${cTitle}</div>
+                                    <div class="card-meta">
+                                        <span class="tag">${anime.type || '未知'}</span>
+                                        <span class="tag" style="background:#e6fffa;color:#319795">${anime.episodeCount || '?'} 集</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`;
-                });
-                html += `</div></div>`;
-            }
-
-            document.getElementById('appContent').innerHTML = html;
+                            </div>`;
+                }).join('')}
+                    </div>
+                </div>`;
+            }).join('');
         }
 
         async function fetchDetails(animeId, rawTitle) {
-            const apiUrl = localStorage.getItem('danmu_api_url');
-            const appContent = document.getElementById('appContent');
-            const cleanTitle = cleanAnimeTitle(rawTitle);
-
-            appContent.innerHTML = '<div class="loading">⏳ 加载剧集中...</div>';
-
+            $('appContent').innerHTML = '<div class="loading">⏳ 加载剧集中...</div>';
             try {
-                const res = await fetch(`${apiUrl}/api/v2/bangumi/${animeId}`);
+                const res = await fetch(`${localStorage.getItem('danmu_api_url')}/api/v2/bangumi/${animeId}`);
                 const data = await res.json();
-
-                if (!data.success || !data.bangumi || !data.bangumi.episodes) {
-                    appContent.innerHTML = '<div class="error">❌ 无法获取剧集列表</div>';
-                    return;
-                }
-
-                renderEpisodes(data.bangumi.episodes, cleanTitle);
+                if (!data.bangumi?.episodes) throw new Error('无剧集数据');
+                renderEpisodes(data.bangumi.episodes, cleanStr(rawTitle, /【.*/));
             } catch (err) {
-                appContent.innerHTML = `<div class="error">❌ 获取详情失败：${err.message}</div>`;
+                $('appContent').innerHTML = `<div class="error">❌ 加载失败：${err.message}</div>`;
             }
         }
 
         function renderEpisodes(episodes, title) {
-            // 根据剧集名称中的【平台】标签进行二次分组
-            const groupedEpisodes = episodes.reduce((acc, ep) => {
-                const titleStr = ep.episodeTitle || '';
-                const match = titleStr.match(/【(.*?)】/);
+            // 解析所有来源
+            const grouped = episodes.reduce((acc, ep) => {
+                const match = (ep.episodeTitle || '').match(/【(.*?)】/);
                 const source = match ? match[1] : '默认/未分类';
-
-                if (!acc[source]) acc[source] = [];
-                acc[source].push(ep);
+                (acc[source] = acc[source] || []).push(ep);
                 return acc;
             }, {});
 
             let html = `
                 <div class="details-header">
-                    <button class="back-btn" onclick="renderGroupedResults(currentSearchResults)">
-                        ← 返回列表
-                    </button>
+                    <button class="back-btn" onclick="renderGroupedResults(currentSearchResults)">← 返回列表</button>
                     <h2>${title}</h2>
-                </div>
-            `;
+                </div>`;
 
-            // 判断来源数量
-            const sourceKeys = Object.keys(groupedEpisodes);
-
-            if (sourceKeys.length === 1) {
-                // 如果只有一个来源，则隐藏分组标签
-                const singleSource = sourceKeys[0];
-                const eps = groupedEpisodes[singleSource];
-
-                html += `
-                    <div class="episode-source-group">
-                        <div class="episodes-list">
-                `;
-
-                eps.forEach(ep => {
-                    const cleanTitle = cleanEpisodeTitle(ep.episodeTitle || `第 ${ep.episodeNumber} 集`);
-                    html += `
-                        <button class="episode-btn" onclick="pushDanmu(this, '${ep.episodeId}')" title="${cleanTitle}">
-                            <span>${cleanTitle}</span>
-                            <span style="font-size: 0.8rem; color: var(--text-muted);">推送</span>
-                        </button>
-                    `;
-                });
-
-                html += `
-                        </div>
+            // 无论来源多少，固定展示美化版的分组 Header
+            html += Object.entries(grouped).map(([source, eps]) => `
+                <div class="episode-source-group">
+                    <h3 class="episode-source-title">▶ 来源：${source}</h3>
+                    <div class="episodes-list">
+                        ${eps.map(ep => {
+                const cTitle = cleanStr(ep.episodeTitle || `第 ${ep.episodeNumber} 集`, /【.*?】\s*/g);
+                return `
+                            <button class="episode-btn" onclick="pushDanmu(this, '${ep.episodeId}')" title="${cTitle}">
+                                <span>${cTitle}</span><span style="font-size:0.8rem;color:var(--text-muted);">推送</span>
+                            </button>`;
+            }).join('')}
                     </div>
-                `;
-            } else {
-                // 如果有多个来源，按来源进行分组显示
-                for (const [source, eps] of Object.entries(groupedEpisodes)) {
-                    html += `
-                        <div class="episode-source-group">
-                            <h3 class="episode-source-title">${source}</h3>
-                            <div class="episodes-list">
-                    `;
+                </div>
+            `).join('');
 
-                    eps.forEach(ep => {
-                        const cleanTitle = cleanEpisodeTitle(ep.episodeTitle || `第 ${ep.episodeNumber} 集`);
-                        html += `
-                            <button class="episode-btn" onclick="pushDanmu(this, '${ep.episodeId}')" title="${cleanTitle}">
-                                <span>${cleanTitle}</span>
-                                <span style="font-size: 0.8rem; color: var(--text-muted);">推送</span>
-                            </button>
-                        `;
-                    });
-
-                    html += `
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-
-            document.getElementById('appContent').innerHTML = html;
+            $('appContent').innerHTML = html;
         }
 
         async function pushDanmu(btn, episodeId) {
-            const apiUrl = localStorage.getItem('danmu_api_url');
-            const okUrl = localStorage.getItem('danmu_ok_url');
-
+            const api = localStorage.getItem('danmu_api_url'), ok = localStorage.getItem('danmu_ok_url');
             const originalHTML = btn.innerHTML;
             btn.innerHTML = '<span>推送中...</span>';
             btn.style.pointerEvents = 'none';
 
-            const danmuPath = `${apiUrl}/api/v2/comment/${episodeId}?format=xml`;
-            const reqUrl = `${okUrl}/action?do=refresh&type=danmaku&path=${encodeURIComponent(danmuPath)}`;
-
             try {
-                await fetch(reqUrl, { mode: 'no-cors' });
-                btn.style.borderColor = '#48bb78';
-                btn.style.backgroundColor = '#f0fff4';
-                btn.style.color = '#2f855a';
+                await fetch(`${ok}/action?do=refresh&type=danmaku&path=${encodeURIComponent(`${api}/api/v2/comment/${episodeId}?format=xml`)}`, { mode: 'no-cors' });
+                btn.style.cssText = 'border-color:#48bb78; background:#f0fff4; color:#2f855a; pointer-events:none;';
                 btn.innerHTML = '<span>✅ 推送成功</span>';
             } catch (err) {
-                btn.style.borderColor = '#e53e3e';
-                btn.style.backgroundColor = '#fff5f5';
-                btn.style.color = '#c53030';
+                btn.style.cssText = 'border-color:#e53e3e; background:#fff5f5; color:#c53030; pointer-events:none;';
                 btn.innerHTML = '<span>❌ 推送失败</span>';
             }
 
             setTimeout(() => {
                 btn.innerHTML = originalHTML;
-                btn.style.pointerEvents = 'auto';
-                btn.style.borderColor = '';
-                btn.style.backgroundColor = '';
-                btn.style.color = '';
+                btn.style.cssText = '';
             }, 2500);
         }
     </script>
