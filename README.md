@@ -16,7 +16,7 @@
 在使用本客户端之前，您需要准备好以下两项基础服务：
 
 1.  **弹幕 API 服务**：部署好弹幕 API 后端程序（如 `huangxd-/danmu_api`），获取其访问地址和 Token（例如：`http://192.168.1.10:9321/87654321`）。
-2.  **OK影视客户端**：确保您的电视/机顶盒上已安装并运行“OK影视”，并获取其局域网控制地址（例如：`http://192.168.1.20:9979`）。
+2.  **OK影视客户端**：确保您的电视/机顶盒上已安装并运行“OK影视”，并获取其局域网控制地址（例如：`http://192.168.1.20:9978`）。
 
 ## 📖 使用指南
 
@@ -40,10 +40,10 @@
 const SOURCE_CONFIG = {
     // 1. 平台数据映射定义 (修改名称或图片路径)
     "source_data": {
-        "tencent": { "name": "腾讯视频", "logo": "./img/danmu_logo/tencent.png" },
-        "iqiyi": { "name": "爱奇艺", "logo": "./img/danmu_logo/iqiyi.png" },
+        "tencent": { "name": "腾讯视频", "logo": "./danmu_logo/tencent.png" },
+        "iqiyi": { "name": "爱奇艺", "logo": "./danmu_logo/iqiyi.png" },
         // ... 添加或修改你的平台
-        "default": { "name": "其他", "logo": "./img/danmu_logo/default.png" }
+        "default": { "name": "其他", "logo": "./danmu_logo/default.png" }
     },
     // 2. 搜索结果与剧集的分组排序优先级 (越靠前优先级越高)
     "order": ["tencent", "youku", "iqiyi", "imgo", "bilibili", "renren", "360", "vod"]
