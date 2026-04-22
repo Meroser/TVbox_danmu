@@ -1,605 +1,532 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎈弹幕推送</title>
+    <title>弹幕推送</title>
     <link rel="icon" href="./img/favicon.ico">
     <style>
         :root {
-            --primary-color: #5a67d8;
-            --primary-hover: #434190;
-            --bg-color: #f7fafc;
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --bg-color: #f4f7f6;
             --card-bg: #ffffff;
             --text-main: #2d3748;
             --text-muted: #718096;
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             color: var(--text-main);
             line-height: 1.5;
-            padding: 20px;
+            min-height: 100vh;
         }
 
-        .header {
-            max-width: 1200px;
-            margin: 0 auto 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-direction: column; min-height: 100vh; }
 
-        .header h1 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
+        /* 顶部导航 */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0 20px 0; }
+        .header-logo { 
+            font-size: 1.4rem; font-weight: 700; color: var(--text-main); 
+            display: flex; align-items: center; gap: 8px; opacity: 0; 
+            transition: 0.3s; cursor: pointer; user-select: none;
         }
+        .header-logo.show { opacity: 1; }
+        .header-logo:hover { opacity: 0.7; }
+        .header-logo svg { color: var(--primary); }
 
-        .btn {
-            padding: 10px 20px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
+        .settings-btn { 
+            background: var(--card-bg); border: none; padding: 10px 20px; border-radius: 30px; 
+            cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: 600; color: var(--text-main); transition: 0.2s; 
+            display: flex; align-items: center; gap: 6px;
         }
+        .settings-btn:hover { box-shadow: var(--shadow); transform: translateY(-2px); color: var(--primary); }
 
-        .btn:hover {
-            background: var(--primary-hover);
+        /* 搜索区域 */
+        .search-wrapper { 
+            display: flex; flex-direction: column; align-items: center; 
+            margin-top: 12vh; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+            width: 100%;
         }
+        .search-wrapper.searched { margin-top: 0; }
 
-        .btn:disabled {
-            background: #a0aec0;
-            cursor: not-allowed;
-        }
+        .main-title { text-align: center; margin-bottom: 30px; transition: 0.4s; display: flex; flex-direction: column; align-items: center; }
+        .main-title-flex { display: flex; align-items: center; gap: 12px; justify-content: center; }
+        .main-title h1 { font-size: 3rem; background: linear-gradient(45deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+        .main-title p { color: var(--text-muted); font-size: 1.1rem; margin-top: 8px; }
+        .search-wrapper.searched .main-title { opacity: 0; height: 0; margin: 0; overflow: hidden; transform: scale(0.8); }
 
-        .btn-secondary {
-            background: #edf2f7;
-            color: var(--text-main);
+        /* 搜索框 */
+        .search-box {
+            width: 100%; max-width: 650px; background: var(--card-bg);
+            padding: 8px 12px 8px 20px; border-radius: 50px; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 2px solid transparent; transition: 0.3s;
         }
+        .search-box:focus-within { border-color: rgba(102, 126, 234, 0.4); box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15); transform: translateY(-2px); }
+        
+        .search-input { flex: 1; border: none; outline: none; font-size: 1.15rem; padding: 5px 0; background: transparent; color: var(--text-main); }
+        .search-input::placeholder { color: #a0aec0; }
 
-        .btn-secondary:hover {
-            background: #e2e8f0;
+        .icon-btn { 
+            background: transparent; border: none; cursor: pointer; width: 44px; height: 44px; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            color: var(--text-muted); transition: 0.2s; flex-shrink: 0;
         }
+        .icon-btn:hover { background: #edf2f7; color: var(--primary); }
+        .btn-search { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .btn-search:hover { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); color: white; transform: scale(1.05); }
 
-        .settings-btn {
-            background: var(--card-bg);
-            color: var(--text-main);
-            box-shadow: var(--shadow);
+        /* 历史记录 */
+        .history-tags { 
+            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 25px; 
+            justify-content: center; max-width: 700px; transition: 0.4s;
+            max-height: 72px; /* 限制约2行的高度 */
+            overflow: hidden;
         }
+        /* 搜索后彻底隐藏历史记录 */
+        .search-wrapper.searched .history-tags { opacity: 0; height: 0; margin: 0; pointer-events: none; }
+        
+        .tag { 
+            font-size: 0.85rem; background: var(--card-bg); color: var(--text-muted); padding: 6px 16px; 
+            border-radius: 20px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border: 1px solid #e2e8f0;
+        }
+        .tag:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); }
 
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 40px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 12px 20px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--primary-color);
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .loading,
-        .error,
-        .no-data {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
-
-        .error {
-            color: #e53e3e;
-        }
+        /* 内容区 */
+        .main-content { margin-top: 40px; width: 100%; flex: 1; }
+        .loading, .error, .no-data { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 1.1rem; background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); }
+        .error { color: #e53e3e; }
 
         /* 卡片与网格 */
-        .source-group {
-            margin-bottom: 40px;
-        }
-
+        .source-group { margin-bottom: 40px; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .source-title {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
-            color: #4a5568;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.3rem; margin-bottom: 20px; color: var(--text-main);
+            display: flex; align-items: center; gap: 12px; font-weight: 700;
         }
+        .source-logo { width: 28px; height: 28px; border-radius: 6px; object-fit: contain; }
+        .source-count { font-size: 0.85rem; background: var(--primary); color: white; padding: 2px 10px; border-radius: 12px; margin-left: auto; font-weight: 600; box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3); }
 
-        .source-logo {
-            width: 26px;
-            height: 26px;
-            border-radius: 4px;
-            object-fit: contain;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.5); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .card-img { width: 100%; height: 220px; object-fit: cover; background-color: #edf2f7; }
+        .card-info { padding: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .card-title { font-size: 1.05rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-meta { display: flex; gap: 6px; }
+        .tag-small { background: #ebf4ff; color: #3182ce; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
 
-        .source-count {
-            font-size: 0.9rem;
-            background: #e2e8f0;
-            padding: 2px 10px;
-            border-radius: 12px;
-            margin-left: auto;
-            font-weight: 600;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-img {
-            width: 100%;
-            height: 230px;
-            object-fit: cover;
-            background-color: #edf2f7;
-        }
-
-        .card-info {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .tag {
-            background: #ebf4ff;
-            color: #3182ce;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        /* 剧集列表与优化后的分组标题 */
-        .details-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
-            font-size: 1rem;
-            color: var(--primary-color);
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .episode-source-group {
-            margin-bottom: 30px;
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
+        /* 剧集详情 (强制单列布局) */
+        .details-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; background: var(--card-bg); padding: 15px 20px; border-radius: var(--radius); box-shadow: var(--shadow); }
+        .back-btn { background: #f7fafc; border: none; font-size: 0.95rem; color: var(--text-main); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+        .back-btn:hover { background: var(--primary); color: white; }
+        
+        .episode-source-group { margin-bottom: 30px; background: var(--card-bg); padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow); }
         .episode-source-title {
-            font-size: 1.05rem;
-            color: var(--primary-hover);
-            margin-bottom: 15px;
-            padding: 8px 12px;
-            background: #ebf4ff;
-            border-left: 4px solid var(--primary-color);
-            border-radius: 0 4px 4px 0;
-            font-weight: 600;
+            font-size: 1.1rem; color: var(--secondary); margin-bottom: 20px; 
+            padding: 10px 15px; background: rgba(118, 75, 162, 0.05); border-left: 5px solid var(--secondary);
+            border-radius: 0 8px 8px 0; font-weight: 700;
         }
-
-        .episodes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
+        /* 强制单列 */
+        .episodes-list { display: flex; flex-direction: column; gap: 12px; }
         .episode-btn {
-            background: var(--bg-color);
-            border: 1px solid #e2e8f0;
-            padding: 12px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 0.95rem;
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px 18px; 
+            border-radius: 10px; cursor: pointer; text-align: left; font-size: 0.95rem; 
+            transition: 0.2s; display: flex; justify-content: space-between; align-items: center; font-weight: 500;
         }
-
-        .episode-btn:hover {
-            border-color: var(--primary-color);
-            background: #ebf4ff;
-            color: var(--primary-color);
-        }
+        .episode-btn:hover { border-color: var(--primary); background: #ebf4ff; color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(102,126,234,0.15); }
 
         /* 模态框 */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s; }
+        .modal { background: var(--card-bg); padding: 35px; border-radius: 20px; width: 90%; max-width: 480px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        .modal h2 { margin-bottom: 25px; font-size: 1.5rem; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); }
+        .close-modal { cursor: pointer; color: var(--text-muted); background: #f7fafc; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.2s; font-size: 1rem; }
+        .close-modal:hover { background: #fee2e2; color: #ef4444; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: #4a5568; }
+        .input-group { display: flex; gap: 10px; }
+        .input-group input { flex: 1; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; outline: none; transition: 0.2s; font-size: 1rem; }
+        .input-group input:focus { border-color: var(--primary); }
+        
+        /* 按钮样式 */
+        .btn-test { background: #edf2f7; border: none; padding: 0 20px; border-radius: 10px; font-weight: 600; color: #4a5568; cursor: pointer; transition: 0.2s; }
+        .btn-test:hover { background: #e2e8f0; }
+        .btn-main { padding: 14px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 1.05rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(102,126,234,0.3); }
+        .btn-main:hover { box-shadow: 0 6px 20px rgba(102,126,234,0.4); transform: translateY(-2px); }
+        
+        .btn-clear { background: #fff0f0; color: #e53e3e; box-shadow: none; border: 1px solid #fed7d7; }
+        .btn-clear:hover { background: #fee2e2; color: #c53030; box-shadow: none; transform: translateY(-2px); }
 
-        .modal {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--radius);
-            width: 90%;
-            max-width: 500px;
-            box-shadow: var(--shadow);
-        }
-
-        .modal h2 {
-            margin-bottom: 20px;
-            font-size: 1.4rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .close-modal {
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .input-group input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #cbd5e0;
-            border-radius: 6px;
-            outline: none;
-        }
-
-        .test-msg {
-            font-size: 0.85rem;
-            margin-top: 5px;
-            min-height: 20px;
-        }
-
-        footer {
-            margin-top: 50px;
-            padding: 20px;
-            text-align: center;
-            color: #999;
-            font-size: 13px;
-        }
+        footer { padding: 30px 20px; text-align: center; color: #a0aec0; font-size: 0.85rem; }
 
         @media (max-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            }
-
-            .card-img {
-                height: 180px;
-            }
-
-            .search-container {
-                flex-direction: column;
-            }
+            .main-title h1 { font-size: 2.2rem; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+            .card-img { height: 180px; }
+            .search-wrapper { margin-top: 8vh; }
+            .header-logo span { display: none; } /* 极小屏幕隐藏文字只留Logo */
         }
     </style>
 </head>
-
 <body>
 
+<div class="container">
     <header class="header">
-        <h1>📺 弹幕推送-OK影视</h1>
-        <button class="btn settings-btn" onclick="toggleModal(true)">⚙️ 设置</button>
+        <div class="header-logo" id="headerLogo" onclick="backToHome()" title="返回主页">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                <polyline points="17 2 12 7 7 2"></polyline>
+            </svg>
+            <span>弹幕推送</span>
+        </div>
+        <button class="settings-btn" onclick="toggleModal(true)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            设置
+        </button>
     </header>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="输入影视名称，例如：生万物"
-            onkeypress="if(event.key==='Enter') searchAnime()">
-        <button class="btn" id="searchBtn" onclick="searchAnime()">搜索</button>
+    <div class="search-wrapper" id="searchWrapper">
+        <div class="main-title">
+            <div class="main-title-flex">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                    <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                    <polyline points="17 2 12 7 7 2"></polyline>
+                </svg>
+                <h1>弹幕推送</h1>
+            </div>
+            <p>为您的 OK影视、FongMi影视、TVBOX 提供最强弹幕推送支持</p>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="想搜什么？" onkeypress="if(event.key==='Enter') searchAnime()">
+            
+            <button class="icon-btn" onclick="fetchCurrentMedia()" title="获取电视端正在播放的内容">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            </button>
+            
+            <button class="icon-btn btn-search" id="searchBtn" onclick="searchAnime()" title="搜索">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+        </div>
+
+        <div class="history-tags" id="historyTags"></div>
     </div>
 
-    <main class="main-content" id="appContent">
-        <div class="no-data">请输入名称开始搜索</div>
-    </main>
+    <main class="main-content" id="appContent"></main>
 
     <footer>
-        <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 5px;">
-            <span>当前版本 v1.1.0</span> | <a href="https://github.com/Meroser/TVbox" target="_blank"
-                style="color: #3b82f6; text-decoration: none;">访问 GitHub</a>
-        </div>
-        本站仅供个人学习研究使用，请勿用于商业用途。
+        <p>🎈版本：v1.2 | <a href="https://github.com/Meroser/TVbox" target="_blank" style="color:#667eea; text-decoration:none; font-weight:600;">GitHub 项目主页</a></p>
+        <p style="margin-top: 5px;">本站仅供个人学习研究使用，请勿用于商业用途</p>
     </footer>
+</div>
 
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal">
-            <h2>接口设置 <span class="close-modal" onclick="toggleModal(false)">✖</span></h2>
-            <div class="form-group">
-                <label>弹幕API (如 http://ip:port/token)</label>
-                <div class="input-group">
-                    <input type="text" id="apiUrlInput" placeholder="http://ip:port/token">
-                    <button class="btn btn-secondary" onclick="testConn('apiUrlInput', 'apiTestMsg', false)">测试</button>
-                </div>
-                <div id="apiTestMsg" class="test-msg"></div>
+<div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+        <h2>接口配置 <span class="close-modal" onclick="toggleModal(false)">✖</span></h2>
+        
+        <div class="form-group">
+            <label>🎈 弹幕 API 地址 (含 Token)</label>
+            <div class="input-group">
+                <input type="text" id="apiUrlInput" placeholder="例如: http://192.168.1.10:9321/1234">
+                <button class="btn-test" onclick="testConn('apiUrlInput', 'apiTestMsg', false)">测试</button>
             </div>
-            <div class="form-group">
-                <label>OK影视地址 (如 http://ip:port)</label>
-                <div class="input-group">
-                    <input type="text" id="okUrlInput" placeholder="http://ip:port">
-                    <button class="btn btn-secondary" onclick="testConn('okUrlInput', 'okTestMsg', true)">测试</button>
-                </div>
-                <div id="okTestMsg" class="test-msg"></div>
+            <div id="apiTestMsg" class="test-msg"></div>
+        </div>
+
+        <div class="form-group">
+            <label>📺 影视客户端地址</label>
+            <div class="input-group">
+                <input type="text" id="okUrlInput" placeholder="例如: http://192.168.1.20:9978">
+                <button class="btn-test" onclick="testConn('okUrlInput', 'okTestMsg', true)">测试</button>
             </div>
-            <button class="btn" style="width: 100%; margin-top: 10px;" onclick="saveSettings()">保存配置</button>
+            <div id="okTestMsg" class="test-msg"></div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 25px;">
+            <button class="btn-main btn-clear" style="flex: 1;" onclick="clearCache()" title="清除配置与历史记录">清理缓存</button>
+            <button class="btn-main" style="flex: 2;" onclick="saveSettings()">保存配置并使用</button>
         </div>
     </div>
+</div>
 
-    <script>
-        // DOM快捷选择器
-        const $ = id => document.getElementById(id);
+<script>
+    const $ = id => document.getElementById(id);
+    
+    // 来源配置
+    const CONFIG = {
+        "source_data": {
+            "tencent": { "name": "腾讯视频", "logo": "./img/danmu_logo/tencent.png" },
+            "youku": { "name": "优酷", "logo": "./img/danmu_logo/youku.png" },
+            "iqiyi": { "name": "爱奇艺", "logo": "./img/danmu_logo/iqiyi.png" },
+            "imgo": { "name": "芒果TV", "logo": "./img/danmu_logo/imgo.png" },
+            "bilibili": { "name": "哔哩哔哩", "logo": "./img/danmu_logo/bilibili.png" },
+            "renren": { "name": "人人影视", "logo": "./img/danmu_logo/renren.png" },
+            "360": { "name": "360视频", "logo": "./img/danmu_logo/360.png" },
+            "vod": { "name": "vod", "logo": "./img/danmu_logo/vod.png" },
+            "default": { "name": "未知来源", "logo": "./img/danmu_logo/default.png" }
+        },
+        "order": ["tencent", "youku", "iqiyi", "imgo", "bilibili", "renren", "360", "vod"]
+    };
 
-        const SOURCE_CONFIG = {
-            "source_data": {
-                "tencent": { "name": "腾讯视频", "logo": "./danmu_logo/tencent.png" },
-                "youku": { "name": "优酷", "logo": "./danmu_logo/youku.png" },
-                "iqiyi": { "name": "爱奇艺", "logo": "./danmu_logo/iqiyi.png" },
-                "imgo": { "name": "芒果TV", "logo": "./danmu_logo/imgo.png" },
-                "bilibili": { "name": "哔哩哔哩", "logo": "./danmu_logo/bilibili.png" },
-                "renren": { "name": "人人影视", "logo": "./danmu_logo/renren.png" },
-                "360": { "name": "360视频", "logo": "./danmu_logo/360.png" },
-                "vod": { "name": "vod", "logo": "./danmu_logo/vod.png" },
-                "default": { "name": "其他", "logo": "./danmu_logo/default.png" }
-            },
-            "order": ["tencent", "youku", "iqiyi", "imgo", "bilibili", "renren", "360", "vod"]
-        };
+    let currentSearchResults = null;
 
-        let currentSearchResults = null;
+    window.onload = () => {
+        if (!localStorage.getItem('danmu_api_url') || !localStorage.getItem('danmu_ok_url')) {
+            toggleModal(true);
+        }
+        renderHistory();
+    };
 
-        window.onload = () => {
-            if (!localStorage.getItem('danmu_api_url') || !localStorage.getItem('danmu_ok_url')) toggleModal(true);
-        };
+    // 返回主页功能
+    function backToHome() {
+        $('searchWrapper').classList.remove('searched');
+        $('headerLogo').classList.remove('show');
+        $('appContent').innerHTML = '';
+        $('searchInput').value = '';
+    }
 
-        function toggleModal(show) {
-            if (show) {
-                $('apiUrlInput').value = localStorage.getItem('danmu_api_url') || '';
-                $('okUrlInput').value = localStorage.getItem('danmu_ok_url') || '';
-                $('apiTestMsg').innerHTML = $('okTestMsg').innerHTML = '';
+    // 清理缓存功能
+    function clearCache() {
+        if (confirm('⚠️ 确定要清空接口配置和所有的搜索历史记录吗？')) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    // 模态框控制
+    function toggleModal(show) {
+        if (show) {
+            $('apiUrlInput').value = localStorage.getItem('danmu_api_url') || '';
+            $('okUrlInput').value = localStorage.getItem('danmu_ok_url') || '';
+            $('apiTestMsg').innerHTML = $('okTestMsg').innerHTML = '';
+        }
+        $('settingsModal').style.display = show ? 'flex' : 'none';
+    }
+
+    const formatUrl = url => url.trim().replace(/\/$/, '');
+    const cleanStr = (title, regex) => title.replace(regex, '').trim();
+
+    // 通用测试接口
+    async function testConn(inputId, msgId, isOkMode) {
+        const url = formatUrl($(inputId).value);
+        const msgEl = $(msgId);
+        if (!url) return msgEl.innerHTML = '<span style="color:#e53e3e">请输入完整地址</span>';
+        
+        msgEl.innerHTML = '<span style="color:#3182ce">测试中...</span>';
+        try {
+            await fetch(isOkMode ? `${url}/action?do=test` : url, { mode: 'no-cors' });
+            msgEl.innerHTML = '<span style="color:#48bb78">✅ 连接成功</span>';
+        } catch (e) {
+            msgEl.innerHTML = '<span style="color:#e53e3e">❌ 连接失败，请检查网络或配置</span>';
+        }
+    }
+
+    function saveSettings() {
+        const api = formatUrl($('apiUrlInput').value), ok = formatUrl($('okUrlInput').value);
+        if (!api || !ok) return alert('请填写完整这两个地址！');
+        localStorage.setItem('danmu_api_url', api);
+        localStorage.setItem('danmu_ok_url', ok);
+        toggleModal(false);
+    }
+
+    // 获取播放器媒体内容
+    async function fetchCurrentMedia() {
+        const okUrl = localStorage.getItem('danmu_ok_url');
+        if (!okUrl) return alert('💡 请先在右上角设置中填写客户端地址');
+        
+        const btn = document.querySelector('.search-box .icon-btn');
+        btn.style.animation = 'spin 1s linear infinite';
+        
+        try {
+            const res = await fetch(`${okUrl}/media`);
+            const data = await res.json();
+            if (data && data.title) {
+                $('searchInput').value = data.title;
+            } else {
+                alert('未获取到标题，可能是播放器处于空闲状态');
             }
-            $('settingsModal').style.display = show ? 'flex' : 'none';
+        } catch (e) {
+            alert('获取失败，请确认电视端播放器正在运行，并允许了跨域(CORS)访问');
+        } finally {
+            btn.style.animation = '';
         }
+    }
 
-        const formatUrl = url => url.trim().replace(/\/$/, '');
-        const cleanStr = (title, regex) => title.replace(regex, '').trim();
+    // 搜索历史管理
+    function updateHistory(q) {
+        let h = JSON.parse(localStorage.getItem('search_history') || '[]');
+        h = [q, ...h.filter(i => i !== q)].slice(0, 10);
+        localStorage.setItem('search_history', JSON.stringify(h));
+        renderHistory();
+    }
 
-        // 合并精简版测试探针
-        async function testConn(inputId, msgId, isOkMode) {
-            const url = formatUrl($(inputId).value);
-            const msgEl = $(msgId);
-            if (!url) return msgEl.innerHTML = '<span style="color:#e53e3e">请输入完整地址</span>';
+    function renderHistory() {
+        const h = JSON.parse(localStorage.getItem('search_history') || '[]');
+        $('historyTags').innerHTML = h.map(i => `<span class="tag" onclick="quickSearch('${i}')">${i}</span>`).join('');
+    }
 
-            msgEl.innerHTML = '<span style="color:#3182ce">测试中...</span>';
-            try {
-                await fetch(isOkMode ? `${url}/action?do=test` : url, { mode: 'no-cors' });
-                msgEl.innerHTML = '<span style="color:#48bb78">✅ 连接成功</span>';
-            } catch (e) {
-                msgEl.innerHTML = '<span style="color:#e53e3e">❌ 连接失败</span>';
+    function quickSearch(q) { 
+        $('searchInput').value = q; 
+        searchAnime(); 
+    }
+
+    // 核心搜索逻辑
+    async function searchAnime() {
+        const q = $('searchInput').value.trim();
+        const api = localStorage.getItem('danmu_api_url');
+        if (!q) return;
+        if (!api) return toggleModal(true);
+
+        // 触发 UI 布局动画
+        $('searchWrapper').classList.add('searched');
+        $('headerLogo').classList.add('show');
+
+        $('searchBtn').disabled = true;
+        $('appContent').innerHTML = '<div class="loading">⏳ 正在各大平台努力搜寻中...</div>';
+
+        try {
+            const res = await fetch(`${api}/api/v2/search/anime?keyword=${encodeURIComponent(q)}`);
+            const data = await res.json();
+            
+            if (!data.success || !data.animes?.length) {
+                return $('appContent').innerHTML = '<div class="no-data">😔 抱歉，未找到相关剧集资源</div>';
             }
+            
+            updateHistory(q);
+            currentSearchResults = data.animes;
+            renderGroupedResults(data.animes);
+        } catch (err) {
+            $('appContent').innerHTML = `<div class="error">❌ 请求失败，请检查弹幕 API 地址：${err.message}</div>`;
+        } finally {
+            $('searchBtn').disabled = false;
         }
+    }
 
-        function saveSettings() {
-            const api = formatUrl($('apiUrlInput').value), ok = formatUrl($('okUrlInput').value);
-            if (!api || !ok) return alert('请填写完整这两个地址！');
-            localStorage.setItem('danmu_api_url', api);
-            localStorage.setItem('danmu_ok_url', ok);
-            toggleModal(false);
-        }
+    // 渲染剧集列表
+    function renderGroupedResults(animes) {
+        const grouped = animes.reduce((acc, anime) => {
+            (acc[anime.source || 'default'] = acc[anime.source || 'default'] || []).push(anime);
+            return acc;
+        }, {});
 
-        async function searchAnime() {
-            const query = $('searchInput').value.trim();
-            const apiUrl = localStorage.getItem('danmu_api_url');
-            if (!query) return;
-            if (!apiUrl) return toggleModal(true);
+        const sortedSources = Object.keys(grouped).sort((a, b) => {
+            const iA = CONFIG.order.indexOf(a), iB = CONFIG.order.indexOf(b);
+            if (iA !== -1 && iB !== -1) return iA - iB;
+            return iA !== -1 ? -1 : iB !== -1 ? 1 : a.localeCompare(b);
+        });
 
-            $('searchBtn').disabled = true;
-            $('searchBtn').innerText = '搜索中...';
-            $('appContent').innerHTML = '<div class="loading">⏳ 正在搜索，请稍候...</div>';
-
-            try {
-                const res = await fetch(`${apiUrl}/api/v2/search/anime?keyword=${encodeURIComponent(query)}`);
-                const data = await res.json();
-
-                if (!data.success || !data.animes?.length) {
-                    return $('appContent').innerHTML = '<div class="no-data">😔 未找到相关结果</div>';
-                }
-
-                currentSearchResults = data.animes;
-                renderGroupedResults(data.animes);
-            } catch (err) {
-                $('appContent').innerHTML = `<div class="error">❌ 请求失败：${err.message}</div>`;
-            } finally {
-                $('searchBtn').disabled = false;
-                $('searchBtn').innerText = '搜索';
-            }
-        }
-
-        function renderGroupedResults(animes) {
-            const grouped = animes.reduce((acc, anime) => {
-                (acc[anime.source || 'other'] = acc[anime.source || 'other'] || []).push(anime);
-                return acc;
-            }, {});
-
-            const sortedSources = Object.keys(grouped).sort((a, b) => {
-                const iA = SOURCE_CONFIG.order.indexOf(a), iB = SOURCE_CONFIG.order.indexOf(b);
-                if (iA !== -1 && iB !== -1) return iA - iB;
-                return iA !== -1 ? -1 : iB !== -1 ? 1 : a.localeCompare(b);
-            });
-
-            $('appContent').innerHTML = sortedSources.map(source => {
-                const items = grouped[source];
-                const info = SOURCE_CONFIG.source_data[source] || SOURCE_CONFIG.source_data.default;
-                const dName = SOURCE_CONFIG.source_data[source] ? info.name : source;
-
-                return `
-                <div class="source-group">
-                    <h2 class="source-title">
-                        <img src="${info.logo}" class="source-logo" onerror="this.src='${SOURCE_CONFIG.source_data.default.logo}'">
-                        <span>${dName}</span><span class="source-count">${items.length}</span>
-                    </h2>
-                    <div class="grid">
-                        ${items.map(anime => {
-                    const cTitle = cleanStr(anime.animeTitle, /【.*/);
-                    const img = anime.imageUrl || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="%23edf2f7"/></svg>';
-                    return `
-                            <div class="card" onclick="fetchDetails(${anime.animeId}, '${anime.animeTitle.replace(/'/g, "\\'")}')">
-                                <img class="card-img" src="${img}" alt="${cTitle}" loading="lazy">
-                                <div class="card-info">
-                                    <div class="card-title" title="${cTitle}">${cTitle}</div>
-                                    <div class="card-meta">
-                                        <span class="tag">${anime.type || '未知'}</span>
-                                        <span class="tag" style="background:#e6fffa;color:#319795">${anime.episodeCount || '?'} 集</span>
-                                    </div>
+        $('appContent').innerHTML = sortedSources.map(source => {
+            const items = grouped[source];
+            const info = CONFIG.source_data[source] || CONFIG.source_data.default;
+            const dName = CONFIG.source_data[source] ? info.name : source;
+            
+            return `
+            <div class="source-group">
+                <h2 class="source-title">
+                    <img src="${info.logo}" class="source-logo" onerror="this.src='${CONFIG.source_data.default.logo}'">
+                    <span>${dName}</span><span class="source-count">${items.length} 资源</span>
+                </h2>
+                <div class="grid">
+                    ${items.map(anime => {
+                        const cTitle = cleanStr(anime.animeTitle, /【.*/);
+                        const img = anime.imageUrl || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10" fill="%23edf2f7"/></svg>';
+                        return `
+                        <div class="card" onclick="fetchDetails(${anime.animeId}, '${anime.animeTitle.replace(/'/g, "\\'")}')">
+                            <img class="card-img" src="${img}" alt="${cTitle}" loading="lazy">
+                            <div class="card-info">
+                                <div class="card-title" title="${cTitle}">${cTitle}</div>
+                                <div class="card-meta">
+                                    <span class="tag-small">${anime.type || '未知'}</span>
+                                    <span class="tag-small" style="background:#e6fffa;color:#319795">${anime.episodeCount || '?'} 集</span>
                                 </div>
-                            </div>`;
-                }).join('')}
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        async function fetchDetails(animeId, rawTitle) {
-            $('appContent').innerHTML = '<div class="loading">⏳ 加载剧集中...</div>';
-            try {
-                const res = await fetch(`${localStorage.getItem('danmu_api_url')}/api/v2/bangumi/${animeId}`);
-                const data = await res.json();
-                if (!data.bangumi?.episodes) throw new Error('无剧集数据');
-                renderEpisodes(data.bangumi.episodes, cleanStr(rawTitle, /【.*/));
-            } catch (err) {
-                $('appContent').innerHTML = `<div class="error">❌ 加载失败：${err.message}</div>`;
-            }
-        }
-
-        function renderEpisodes(episodes, title) {
-            // 解析所有来源
-            const grouped = episodes.reduce((acc, ep) => {
-                const match = (ep.episodeTitle || '').match(/【(.*?)】/);
-                const source = match ? match[1] : '默认/未分类';
-                (acc[source] = acc[source] || []).push(ep);
-                return acc;
-            }, {});
-
-            let html = `
-                <div class="details-header">
-                    <button class="back-btn" onclick="renderGroupedResults(currentSearchResults)">← 返回列表</button>
-                    <h2>${title}</h2>
-                </div>`;
-
-            // 无论来源多少，固定展示美化版的分组 Header
-            html += Object.entries(grouped).map(([source, eps]) => `
-                <div class="episode-source-group">
-                    <h3 class="episode-source-title">▶ 来源：${source}</h3>
-                    <div class="episodes-list">
-                        ${eps.map(ep => {
-                const cTitle = cleanStr(ep.episodeTitle || `第 ${ep.episodeNumber} 集`, /【.*?】\s*/g);
-                return `
-                            <button class="episode-btn" onclick="pushDanmu(this, '${ep.episodeId}')" title="${cTitle}">
-                                <span>${cTitle}</span><span style="font-size:0.8rem;color:var(--text-muted);">推送</span>
-                            </button>`;
-            }).join('')}
-                    </div>
+                            </div>
+                        </div>`;
+                    }).join('')}
                 </div>
-            `).join('');
+            </div>`;
+        }).join('');
+    }
 
-            $('appContent').innerHTML = html;
+    // 获取并渲染单剧集详情
+    async function fetchDetails(animeId, rawTitle) {
+        $('appContent').innerHTML = '<div class="loading">⏳ 正在获取剧集列表...</div>';
+        try {
+            const res = await fetch(`${localStorage.getItem('danmu_api_url')}/api/v2/bangumi/${animeId}`);
+            const data = await res.json();
+            if (!data.bangumi?.episodes) throw new Error('接口未返回剧集数据');
+            renderEpisodes(data.bangumi.episodes, cleanStr(rawTitle, /【.*/));
+        } catch (err) {
+            $('appContent').innerHTML = `<div class="error">❌ 加载剧集失败：${err.message}</div>`;
+        }
+    }
+
+    function renderEpisodes(episodes, title) {
+        const grouped = episodes.reduce((acc, ep) => {
+            const match = (ep.episodeTitle || '').match(/【(.*?)】/);
+            const source = match ? match[1] : '默认/未分类';
+            (acc[source] = acc[source] || []).push(ep);
+            return acc;
+        }, {});
+
+        let html = `
+            <div class="details-header">
+                <button class="back-btn" onclick="renderGroupedResults(currentSearchResults)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    返回列表
+                </button>
+                <h2 style="font-size:1.3rem;">${title}</h2>
+            </div>`;
+
+        html += Object.entries(grouped).map(([source, eps]) => `
+            <div class="episode-source-group">
+                <h3 class="episode-source-title">▶ 来源：${source}</h3>
+                <div class="episodes-list">
+                    ${eps.map(ep => {
+                        const cTitle = cleanStr(ep.episodeTitle || `第 ${ep.episodeNumber} 集`, /【.*?】\s*/g);
+                        return `
+                        <button class="episode-btn" onclick="pushDanmu(this, '${ep.episodeId}')" title="${cTitle}">
+                            <span>${cTitle}</span>
+                            <span style="font-size:0.8rem; color:#a0aec0; background:#f7fafc; padding:2px 6px; border-radius:4px;">推送</span>
+                        </button>`;
+                    }).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        $('appContent').innerHTML = html;
+    }
+
+    // 推送弹幕
+    async function pushDanmu(btn, episodeId) {
+        const api = localStorage.getItem('danmu_api_url'), ok = localStorage.getItem('danmu_ok_url');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<span style="color:#667eea; font-weight:600;">🚀 推送中...</span>';
+        btn.style.pointerEvents = 'none';
+
+        try {
+            await fetch(`${ok}/action?do=refresh&type=danmaku&path=${encodeURIComponent(`${api}/api/v2/comment/${episodeId}?format=xml`)}`, { mode: 'no-cors' });
+            btn.style.cssText = 'border-color:#48bb78; background:#f0fff4; color:#2f855a; pointer-events:none; box-shadow:none;';
+            btn.innerHTML = '<span>✅ 推送成功</span>';
+        } catch (err) {
+            btn.style.cssText = 'border-color:#e53e3e; background:#fff5f5; color:#c53030; pointer-events:none; box-shadow:none;';
+            btn.innerHTML = '<span>❌ 推送失败</span>';
         }
 
-        async function pushDanmu(btn, episodeId) {
-            const api = localStorage.getItem('danmu_api_url'), ok = localStorage.getItem('danmu_ok_url');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<span>推送中...</span>';
-            btn.style.pointerEvents = 'none';
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.style.cssText = '';
+        }, 2500);
+    }
+</script>
 
-            try {
-                await fetch(`${ok}/action?do=refresh&type=danmaku&path=${encodeURIComponent(`${api}/api/v2/comment/${episodeId}?format=xml`)}`, { mode: 'no-cors' });
-                btn.style.cssText = 'border-color:#48bb78; background:#f0fff4; color:#2f855a; pointer-events:none;';
-                btn.innerHTML = '<span>✅ 推送成功</span>';
-            } catch (err) {
-                btn.style.cssText = 'border-color:#e53e3e; background:#fff5f5; color:#c53030; pointer-events:none;';
-                btn.innerHTML = '<span>❌ 推送失败</span>';
-            }
-
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.style.cssText = '';
-            }, 2500);
-        }
-    </script>
+<style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
 </body>
-
 </html>
