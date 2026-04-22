@@ -1,7 +1,19 @@
 # 🎈 弹幕推送客户端 (适用于 OK影视/Fongmi影视/TVbox)
 
 这是一个基于原生 JavaScript 编写的轻量级单页面 Web 客户端。本项目配合开源的弹幕 API 服务器（如 `huangxd-/danmu_api`）使用，旨在为局域网内的“OK影视”播放器提供一键式的弹幕搜索、解析与推送服务。
-<p align="center"><img src="https://cdn.jsdelivr.net/gh/Meroser/TVbox_danmu@main/img/ScreenShot_2026-03-29_205442_975.png"></p>
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/Meroser/TVbox_danmu@main/img/picture (1).png"></p>
+
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/Meroser/TVbox_danmu@main/img/picture (2).png"></p>
+
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/Meroser/TVbox_danmu@main/img/picture (3).png"></p>
+
+<p align="center"><img src="https://cdn.jsdelivr.net/gh/Meroser/TVbox_danmu@main/img/picture (4).png"></p>
+
+
+## ℹ️ 更新内容
+1. **支持从电视机获取当前播放节目，搜索弹幕更便捷**
+2. **支持搜索历史记录**
+3. **页面展示优化**
 
 ## ✨ 核心特性
 
