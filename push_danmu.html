@@ -34,9 +34,10 @@
         .header-logo { 
             font-size: 1.4rem; font-weight: 700; color: var(--text-main); 
             display: flex; align-items: center; gap: 8px; opacity: 0; 
-            transition: 0.3s; cursor: pointer; user-select: none;
+            transition: opacity 0.3s, visibility 0.3s; cursor: pointer; user-select: none;
+            visibility: hidden; pointer-events: none; /* 初始状态彻底隐藏，且防误触 */
         }
-        .header-logo.show { opacity: 1; }
+        .header-logo.show { opacity: 1; visibility: visible; pointer-events: auto; }
         .header-logo:hover { opacity: 0.7; }
         .header-logo svg { color: var(--primary); }
 
@@ -85,7 +86,7 @@
         .history-tags { 
             display: flex; flex-wrap: wrap; gap: 10px; margin-top: 25px; 
             justify-content: center; max-width: 700px; transition: 0.4s;
-            max-height: 72px; /* 限制约2行的高度 */
+            max-height: 88px; /* 放宽高度限制，彻底解决 iPhone 下第二行被切边的问题 */
             overflow: hidden;
         }
         /* 搜索后彻底隐藏历史记录 */
@@ -99,7 +100,11 @@
 
         /* 内容区 */
         .main-content { margin-top: 40px; width: 100%; flex: 1; }
-        .loading, .error, .no-data { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 1.1rem; background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); }
+        /* 缩小 loading 和空数据的展示卡片，使其更精致 */
+        .loading, .error, .no-data { 
+            text-align: center; padding: 30px 20px; color: var(--text-muted); 
+            font-size: 1.05rem; background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); 
+        }
         .error { color: #e53e3e; }
 
         /* 卡片与网格 */
@@ -200,7 +205,7 @@
                 </svg>
                 <h1>弹幕推送</h1>
             </div>
-            <p>为您的 OK影视、FongMi影视、TVBOX 提供最强弹幕推送支持</p>
+            <p>搜一搜，享受弹幕带来的极致乐趣吧~</p>
         </div>
         
         <div class="search-box">
